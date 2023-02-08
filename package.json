@@ -1,6 +1,12 @@
 {
   "name": "RDWebApp",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^22.2.0"
+  }
 }
