@@ -3,6 +3,9 @@
 To launch: 
 $ yarn start
 
+To test the random binary number generator:
+$ node randBinarynumgen.js
+
 How to install:
 $ git clone https://github.com/Endeavour-Innovations-Inc/RealDigitalWebApplication.git
 
