@@ -21,7 +21,7 @@ while (i < 100) { // will be replace with data listener module
     } else if (mode == false) {
         console.log(array.pop());
         if (!array.length) {
-            process.exit()
+            break;
         }
     }
 }
