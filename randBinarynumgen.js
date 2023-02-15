@@ -9,7 +9,12 @@ mode = false; // true for continuous, false for "run once" mode
 
 var array = [];
 for (let j = 0; j < 100; j++) { // for loop to populate the array to simulate the data block
-    array.push(parseInt(randomBinary(12), 2)); // 12 bit binary value
+    number = parseInt(randomBinary(12), 2); // 12 bit binary value
+    if (number > 1760) {
+        ;
+    } else if (number <= 1760) {
+        array.push(number); // 12 bit binary value
+    }
 }
     
 i = 0;
@@ -21,7 +26,7 @@ while (i < 100) { // will be replace with data listener module
     } else if (mode == false) {
         console.log(array.pop());
         if (!array.length) {
-            break;
+            break; // allows to exit while loop
         }
     }
 }
