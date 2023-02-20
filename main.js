@@ -4,9 +4,9 @@ let win = null;
 
 const createWindow = () => {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    resizable: false,
+    width: 900,
+    height: 900,
+    resizable: true,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -16,3 +16,4 @@ const createWindow = () => {
 };
 
 app.whenReady().then(createWindow);
+

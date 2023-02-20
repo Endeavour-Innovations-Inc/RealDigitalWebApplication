@@ -10,7 +10,7 @@ mode = false; // true for continuous, false for "run once" mode
 var array = [];
 for (let j = 0; j < 100; j++) { // for loop to populate the array to simulate the data block
     number = parseInt(randomBinary(12), 2); // 12 bit binary value
-    if (number > 1760) {
+    if (number > 1760) { // testing out the frequency input 
         ;
     } else if (number <= 1760) {
         array.push(number); // 12 bit binary value

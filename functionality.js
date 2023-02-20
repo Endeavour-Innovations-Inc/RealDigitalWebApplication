@@ -106,3 +106,9 @@ var array = [];
 for (let j = 0; j < 100; j++) { // for loop to populate the array to simulate the data block
     array.push(parseInt(randomBinary(12), 2)); // 12 bit binary value
 }
+
+function displayText() {
+    var myString = "Test 1";
+    var myText = document.getElementById("myText");
+    myText.textContent = myString;
+  }
