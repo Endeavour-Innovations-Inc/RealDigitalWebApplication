@@ -107,8 +107,44 @@ for (let j = 0; j < 100; j++) { // for loop to populate the array to simulate th
     array.push(parseInt(randomBinary(12), 2)); // 12 bit binary value
 }
 
-function displayText() {
-    var myString = "Test 1";
+function FrequencyInputGainTests() { // doesnt work as intended, needs to be redone 
+    // testing gradual increase/decrease for frequency only 
+    var myString = "Freq Tests";
     var myText = document.getElementById("myText");
     myText.textContent = myString;
+    sleep(function() {}, 1000); 
+
+    // testing gradual increase/decrease for input gain only, frequency remains constant
+    var myString = "Input Gain Tests";
+    var myText = document.getElementById("myText");
+    myText.textContent = myString;
+    sleep(function() {}, 1000); 
+
+    // testing gradual increase/decrease for freq and input gain simultaneously
+    var myString = "Input & Freq Tests";
+    var myText = document.getElementById("myText");
+    myText.textContent = myString;
+    sleep(function() {}, 1000); 
+
+    // testing inverse increase/decrease for freq and input gain simulatenously
+    var myString = "Input & Freq Inv Tests";
+    var myText = document.getElementById("myText");
+    myText.textContent = myString;
+    sleep(function() {}, 1000); 
+
+    // instantaneous change for frequency only
+    var myString = "Freq Instantaneous Tests";
+    var myText = document.getElementById("myText");
+    myText.textContent = myString;
+    sleep(function() {}, 1000); 
+
+    // instantaneous change for input gain only
+    var myString = "Gain Instantaneous Tests";
+    var myText = document.getElementById("myText");
+    myText.textContent = myString;
+    sleep(function() {}, 1000); 
+
+    // instantaneous change for both frequency and input gain
+    // var myText = document.getElementById("myText");
+    // myText.textContent = myString;
   }
