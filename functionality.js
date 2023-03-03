@@ -1,4 +1,4 @@
-let oscillator, isPlaying, pixelRatio, sizeOnScreen, segmentWidth;
+let oscillator, isPlaying, isPaused, pixelRatio, sizeOnScreen, segmentWidth;
 
 // 
 const canvas = document.getElementById("canvas"), // 
@@ -39,9 +39,6 @@ c.fillStyle = "#181818"; // most likely color definiton for background
 c.fillRect(0, 0, canvas.width, canvas.height);
 c.strokeStyle = "#33ee55"; // color for the wave?
 c.beginPath(); // what does this do?
-// c.moveTo(0, canvas.height / 2); // ?
-// c.lineTo(canvas.width, canvas.height / 2); // ?
-// c.stroke(); // ?
 
 // turn on/off button functionaliy
 // sets up a trigger for button click
@@ -94,6 +91,15 @@ gainSlider.addEventListener("input", (event) => {
   }
 });
 
+// add event listener to the pause button
+const pauseBtn = document.getElementById("pause");
+pauseBtn.addEventListener("click", () => {
+  // toggle the isPaused variable
+  isPaused = !isPaused;
+});
+
+let previousWaveform = null;
+
 // draw function
 const draw = () => {
   analyser.getByteTimeDomainData(dataArray);
@@ -102,7 +108,7 @@ const draw = () => {
   // Clear the canvas and draw a white grid
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
-  c.strokeStyle = "white";
+  c.strokeStyle = "rgba(255, 255, 255, 0.2)";
   const numLines = 50; // changing number of lines makes smaller squares
   const lineHeight = canvas.height / numLines;
   for (let i = 0; i < numLines; i++) {
@@ -111,94 +117,41 @@ const draw = () => {
     c.moveTo(0, i * lineHeight);
     c.lineTo(canvas.width, i * lineHeight);
     c.stroke();
+  }
+
+  for (let i = 0; i < numLines; i++) {
     // Draw Vertical lines
     c.beginPath();
     c.moveTo(i * lineHeight, 0);
-    c.lineTo(i * lineHeight, canvas.height);
+    c.lineTo(i * lineHeight, canvas.width);
     c.stroke();
   }
   
-  // Draw the waveform
-  c.strokeStyle = "#33ee55";
-  c.beginPath();
-  c.moveTo(-100, canvas.height / 2);
-  if (isPlaying) {
-    for (let i = 1; i < analyser.frequencyBinCount; i += 1) {
-      let x = i * segmentWidth;
-      let v = dataArray[i] / 128.0;
-      let y = (v * canvas.height) / 2;
-      c.lineTo(x, y);
+  if (isPlaying && !isPaused) { // only draw waveform if playing and not paused
+    // Draw the waveform
+    c.strokeStyle = "#33ee55";
+    c.beginPath();
+    c.moveTo(-100, canvas.height / 2);
+    if (isPlaying) {
+      for (let i = 1; i < analyser.frequencyBinCount; i += 1) {
+        let x = i * segmentWidth;
+        let v = dataArray[i] / 128.0;
+        let y = (v * canvas.height) / 2;
+        c.lineTo(x, y);
+      }
+    }
+    c.lineTo(canvas.width + 100, canvas.height / 2);
+    c.stroke();
+    
+    // Save the current waveform as the previous waveform
+    previousWaveform = c.getImageData(0, 0, canvas.width, canvas.height);
+  } else if (isPaused) { // only draw previous waveform if paused
+    if (previousWaveform) {
+      // Draw the previous waveform
+      c.putImageData(previousWaveform, 0, 0);
     }
   }
-  c.lineTo(canvas.width + 100, canvas.height / 2);
-  c.stroke();
-  
+    
   requestAnimationFrame(draw);
 };
-
-
-const fs = require('fs');
-fs.writeFile('datafile.txt', dataArray.join('\n'), function (err) {
-  if (err) throw err;
-  console.log('Elements written to file');
-});
-
-// Below the code makes sense, above requires explanation in reverse engineering
-var randomBinary = require('random-binary');
-const { performance } = require('perf_hooks');
-const { systemPreferences } = require('electron');
-// randomBinary(4); or 8 or 16 bits to generate different binary number 
-// with different number of bits
-
-mode = false; // true for continuous, false for "run once" mode
-// need to tie it to the button
-
-// everything below does not need reverse engineering
-
-var array = [];
-for (let j = 0; j < 100; j++) { // for loop to populate the array to simulate the data block
-    array.push(parseInt(randomBinary(12), 2)); // 12 bit binary value
-}
-
-function FrequencyInputGainTests() { // doesnt work as intended, needs to be redone 
-    // testing gradual increase/decrease for frequency only 
-    var myString = "Freq Tests";
-    var myText = document.getElementById("myText");
-    myText.textContent = myString;
-    sleep(function() {}, 1000); 
-
-    // testing gradual increase/decrease for input gain only, frequency remains constant
-    var myString = "Input Gain Tests";
-    var myText = document.getElementById("myText");
-    myText.textContent = myString;
-    sleep(function() {}, 1000); 
-
-    // testing gradual increase/decrease for freq and input gain simultaneously
-    var myString = "Input & Freq Tests";
-    var myText = document.getElementById("myText");
-    myText.textContent = myString;
-    sleep(function() {}, 1000); 
-
-    // testing inverse increase/decrease for freq and input gain simulatenously
-    var myString = "Input & Freq Inv Tests";
-    var myText = document.getElementById("myText");
-    myText.textContent = myString;
-    sleep(function() {}, 1000); 
-
-    // instantaneous change for frequency only
-    var myString = "Freq Instantaneous Tests";
-    var myText = document.getElementById("myText");
-    myText.textContent = myString;
-    sleep(function() {}, 1000); 
-
-    // instantaneous change for input gain only
-    var myString = "Gain Instantaneous Tests";
-    var myText = document.getElementById("myText");
-    myText.textContent = myString;
-    sleep(function() {}, 1000); 
-
-    // instantaneous change for both frequency and input gain
-    // var myText = document.getElementById("myText");
-    // myText.textContent = myString;
-  }
 
